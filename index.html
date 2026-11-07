@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Πρόσκληση Γάμου</title>
+<meta name="theme-color" content="#eef3f8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f5f0;
+  --paper-2:#fbfaf6;
+  --ink:#3d4a5c;
+  --muted:#7d8896;
+  --accent:#6f9fd8;
+  --accent-deep:#4b6c99;
+  --line:#cfdbe9;
+  --sky:#eaf1f8;
+  --gold:#b59658;
+  --serif:"Cormorant Garamond","Noto Serif",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,sans-serif;
+  --emboss:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='%23e1dbcf' stroke-width='1.3'%3E%3Ccircle cx='34' cy='34' r='4'/%3E%3Cpath d='M34 26c4-9 11-9 11-2s-7 9-11 2zM34 42c-4 9-11 9-11 2s7-9 11-2zM26 34c-9-4-9-11-2-11s9 7 2 11zM42 34c9 4 9 11 2 11s-9-7-2-11z'/%3E%3Cpath d='M104 92c-12 12-28 7-35 23M69 115c9-2 14 2 16 7M97 99c2-7 9-9 14-7M80 108c-3-5-1-10 4-11'/%3E%3Ccircle cx='111' cy='88' r='2.6'/%3E%3Ccircle cx='86' cy='96' r='1.8'/%3E%3C/g%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:linear-gradient(#eef3f8,#f6f8fb 40%,#eef3f8);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.55;overflow-x:hidden}
+body.locked{overflow:hidden;height:100svh}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+
+#intro{position:fixed;inset:0;z-index:50;overflow:hidden;transition:opacity .9s ease}
+#intro.gone{opacity:0;pointer-events:none}
+.gate-layer{position:absolute;inset:0;perspective:1100px}
+.gate-sky{position:absolute;inset:0;background:linear-gradient(#dbe7f3,#eef3f7 62%,#e7e2d8 62%,#d8d0c1);transition:opacity 1.2s ease}
+.opened .gate-sky{opacity:0;transition-delay:2.6s}
+.foliage{position:absolute;left:-10%;right:-10%;top:-4%;height:30%;z-index:3;filter:blur(1.5px);
+  background:
+   radial-gradient(circle at 8% 40%,#ffffff 0 5px,transparent 6px),
+   radial-gradient(circle at 30% 70%,#ffffff 0 4px,transparent 5px),
+   radial-gradient(circle at 72% 62%,#ffffff 0 5px,transparent 6px),
+   radial-gradient(circle at 92% 45%,#ffffff 0 4px,transparent 5px),
+   radial-gradient(ellipse 22% 60% at 6% 30%,rgba(140,172,132,.85),transparent 70%),
+   radial-gradient(ellipse 18% 45% at 24% 20%,rgba(170,196,158,.8),transparent 70%),
+   radial-gradient(ellipse 20% 50% at 44% 8%,rgba(150,182,140,.7),transparent 70%),
+   radial-gradient(ellipse 18% 50% at 62% 14%,rgba(176,200,164,.8),transparent 70%),
+   radial-gradient(ellipse 22% 55% at 82% 22%,rgba(140,172,132,.85),transparent 70%),
+   radial-gradient(ellipse 18% 70% at 98% 40%,rgba(160,188,150,.85),transparent 70%)}
+.vine{position:absolute;top:10%;bottom:20%;width:16%;z-index:3;filter:blur(1px);
+  background:
+   radial-gradient(ellipse 60% 14% at 50% 10%,rgba(150,182,140,.75),transparent 70%),
+   radial-gradient(ellipse 50% 12% at 30% 34%,rgba(170,196,158,.7),transparent 70%),
+   radial-gradient(ellipse 55% 12% at 70% 58%,rgba(150,182,140,.65),transparent 70%),
+   radial-gradient(circle at 40% 22%,#fff 0 3px,transparent 4px),
+   radial-gradient(circle at 62% 46%,#fff 0 3px,transparent 4px)}
+.vine.l{left:0}.vine.r{right:0}
+.pillar{position:absolute;top:20%;bottom:9%;width:15%;z-index:2;background:linear-gradient(90deg,#e4ded2,#f8f6f1 45%,#d9d1c3);border-radius:2px}
+.pillar::before{content:"";position:absolute;left:-12%;right:-12%;top:-3%;height:5%;background:linear-gradient(#f4f1ea,#ddd5c7);border-radius:2px}
+.pillar::after{content:"";position:absolute;left:18%;right:18%;top:-12%;height:9%;background:radial-gradient(ellipse at 50% 30%,#f7f4ee,#d9d1c3);border-radius:45% 45% 20% 20%/60% 60% 20% 20%}
+.pillar.l{left:3%}.pillar.r{right:3%}
+.leaf{position:absolute;top:24%;bottom:9%;width:32%;z-index:1;transition:transform 1.7s cubic-bezier(.45,0,.25,1)}
+.leaf svg{width:100%;height:100%}
+.leaf.l{left:18%;transform-origin:0 50%}
+.leaf.r{right:18%;transform-origin:100% 50%}
+.leaf.r svg{transform:scaleX(-1)}
+.opened .leaf.l{transform:rotateY(100deg);transition-delay:2.3s}
+.opened .leaf.r{transform:rotateY(-100deg);transition-delay:2.3s}
+.ribbon{position:absolute;left:50%;top:52%;width:34%;max-width:170px;z-index:4;transform:translate(-50%,-50%);transition:transform .8s ease,opacity .7s ease}
+.opened .ribbon{transform:translate(-50%,-10%) scale(.7);opacity:0;transition-delay:1.7s}
+
+.env{position:absolute;inset:0;z-index:10;perspective:1400px}
+.env-body{position:absolute;inset:0;background:var(--emboss),var(--paper);clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%);transition:transform 1.1s cubic-bezier(.6,0,.4,1)}
+.env-body svg{position:absolute;inset:0;width:100%;height:100%}
+.flap-wrap{position:absolute;inset:0;transform-origin:50% 0;filter:drop-shadow(0 6px 8px rgba(70,60,40,.14));transition:transform 1s cubic-bezier(.5,0,.3,1),opacity .4s ease}
+.env-flap{position:absolute;inset:0;background:var(--emboss),var(--paper-2);background-position:30px 20px;clip-path:polygon(0 0,100% 0,50% 58%)}
+.seal{position:absolute;left:50%;top:58%;width:96px;height:96px;transform:translate(-50%,-50%);border-radius:50%;z-index:2;
+  background:radial-gradient(circle at 40% 35%,#fbf9f4,#e6dfd1 70%,#d8cfbe);
+  box-shadow:0 0 0 5px #efe9de,0 0 0 6px #ddd4c4,0 8px 16px rgba(80,65,40,.25);
+  display:grid;place-items:center;transition:transform .5s ease,opacity .4s ease;animation:pulse 2.4s ease-in-out infinite}
+.seal span{font-style:italic;font-size:32px;font-weight:500;color:var(--gold);letter-spacing:-.02em;text-shadow:0 1px 0 rgba(255,255,255,.8)}
+@keyframes pulse{50%{box-shadow:0 0 0 5px #efe9de,0 0 0 6px #ddd4c4,0 8px 16px rgba(80,65,40,.25),0 0 0 14px rgba(181,150,88,.12)}}
+.env-hint{position:absolute;left:0;right:0;bottom:12%;text-align:center;font-style:italic;color:var(--muted);font-size:18px;transition:opacity .3s}
+.opened .seal{transform:translate(-50%,-50%) scale(.6);opacity:0;animation:none}
+.opened .env-hint{opacity:0}
+.opened .flap-wrap{transform:rotateX(178deg);opacity:0;transition-delay:.25s,.9s}
+.opened .env-body{transform:translateY(105%);transition-delay:.85s}
+
+.hero{position:relative;min-height:100svh;display:grid;place-items:center;padding:28px 18px 40px;overflow:hidden}
+.hero::before,.hero::after{content:"";position:absolute;width:60%;height:45%;filter:blur(2px);pointer-events:none;z-index:1}
+.hero::before{left:-18%;top:-6%;background:radial-gradient(ellipse 45% 40% at 40% 40%,rgba(150,182,140,.55),transparent 70%),radial-gradient(ellipse 30% 30% at 70% 70%,rgba(176,200,164,.5),transparent 70%),radial-gradient(circle at 55% 45%,#fff 0 4px,transparent 5px)}
+.hero::after{right:-18%;top:-4%;background:radial-gradient(ellipse 45% 40% at 60% 40%,rgba(150,182,140,.55),transparent 70%),radial-gradient(ellipse 30% 30% at 30% 70%,rgba(176,200,164,.5),transparent 70%),radial-gradient(circle at 45% 50%,#fff 0 4px,transparent 5px)}
+.arch{position:relative;width:min(88vw,430px);height:min(80svh,760px);border-radius:999px 999px 16px 16px;overflow:hidden;box-shadow:0 0 0 7px #f6f3ec,0 0 0 8px #e3dccf,0 24px 50px rgba(60,80,110,.18);z-index:2}
+.arch svg{position:absolute;inset:0;width:100%;height:100%}
+.hero-text{position:absolute;left:0;right:0;top:27%;text-align:center;padding:0 18px}
+.names{font-style:italic;font-weight:500;font-size:clamp(40px,11vw,58px);line-height:1;color:var(--accent-deep);text-shadow:0 2px 12px rgba(255,255,255,.9)}
+.names .amp{display:inline-block;margin:0 .12em;color:var(--gold)}
+.headline{margin-top:10px;font-size:22px;letter-spacing:.04em;color:#5a6d86}
+.scroll-cue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:3;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-family:var(--sans);animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translate(-50%,6px)}}
+.petal{position:absolute;top:-20px;width:10px;height:14px;border-radius:70% 0 70% 0;background:#fff;opacity:.85;z-index:3;pointer-events:none;animation:fall linear infinite}
+@keyframes fall{to{transform:translate(var(--dx),110svh) rotate(540deg)}}
+
+section.block{max-width:520px;margin:0 auto;padding:76px 22px;text-align:center}
+h2{font-style:italic;font-weight:500;font-size:44px;line-height:1.1;color:var(--accent-deep);margin-bottom:10px}
+.sub{color:var(--muted);font-size:18px}
+.orn{display:block;margin:18px auto;width:120px;height:14px;color:var(--line)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+
+.scratch-row{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:12px;margin:26px 0 8px}
+.scard{position:relative;user-select:none;-webkit-user-select:none}
+.scard .face{position:relative;height:118px;border-radius:14px;background:#fff;display:grid;place-items:center;box-shadow:0 6px 18px rgba(70,100,140,.12);overflow:hidden}
+.scard .val{font-size:34px;font-weight:500;color:var(--accent-deep)}
+.scard.mid .val{font-size:24px;font-style:italic}
+.scard canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;transition:opacity .6s ease}
+.scard.done canvas{opacity:0;pointer-events:none}
+.scard .lbl{margin-top:8px;font-family:var(--sans);font-size:10px;letter-spacing:.24em;color:var(--muted)}
+.invited{margin-top:22px;font-style:italic;font-size:42px;color:var(--accent-deep);opacity:0;transform:scale(.9);transition:opacity 1s ease,transform 1s ease}
+.invited.in{opacity:1;transform:none}
+
+.letter-stage{position:relative;height:640px;margin-top:10px;overflow:hidden}
+.env-back,.env-front{position:absolute;left:4%;right:4%;bottom:0;height:200px;border-radius:6px}
+.env-back{background:#b9cfe8}
+.env-front{background:linear-gradient(#c9dbef,#adc6e3);clip-path:polygon(0 0,50% 48%,100% 0,100% 100%,0 100%);z-index:3}
+.letter{position:absolute;left:10%;right:10%;bottom:20px;height:420px;z-index:2;background:var(--emboss),var(--paper-2);border-radius:4px;padding:30px 22px;box-shadow:0 4px 18px rgba(60,80,110,.15);transform:translateY(-130px);transition:transform 1.6s cubic-bezier(.3,.7,.2,1);text-align:center;overflow:hidden}
+.letter-stage:not(.in) .letter{transform:translateY(220px)}
+.letter .for{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);min-height:16px}
+.letter .greet{font-style:italic;font-size:26px;color:var(--accent-deep);margin:6px 0 10px}
+.letter p{font-size:18px;line-height:1.5}
+.letter .sign{margin-top:14px;font-style:italic;color:var(--accent-deep)}
+
+.timeline{position:relative;margin-top:30px}
+.timeline::before{content:"";position:absolute;left:50%;top:6px;bottom:6px;width:1px;background:var(--line)}
+.tl{display:grid;grid-template-columns:1fr 34px 1fr;align-items:start;margin-bottom:26px}
+.tl .dot{grid-column:2;width:11px;height:11px;margin:12px auto 0;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px #eaf1f8}
+.tl .c{text-align:right}
+.tl:nth-child(even) .c{grid-column:3;text-align:left}
+.tl:nth-child(odd) .c{grid-column:1;grid-row:1}
+.tl:nth-child(even) .dot{grid-row:1}
+.tl .t{font-size:30px;font-weight:500;color:var(--accent-deep);line-height:1.1}
+.tl .n{font-size:19px}
+.tl .m{font-size:15px;color:var(--muted);font-style:italic}
+
+.venue-card{margin-top:24px;background:#fff;border-radius:18px;padding:24px 20px;box-shadow:0 10px 30px rgba(70,100,140,.1)}
+.venue-card svg{width:34px;height:34px;color:var(--accent);margin:0 auto 6px}
+.venue-name{font-size:26px;font-weight:500}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:12px 26px;border-radius:999px;background:var(--accent);color:#fff;font-family:var(--sans);font-size:14px;letter-spacing:.06em;text-decoration:none;box-shadow:0 6px 16px rgba(111,159,216,.35);transition:transform .2s ease,background .2s ease}
+.btn:hover{background:var(--accent-deep)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--accent-deep);box-shadow:inset 0 0 0 1px var(--line)}
+
+.swipe{margin:14px 0 10px;font-family:var(--sans);font-size:12px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 22px 14px;margin:0 -22px;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.photo{flex:0 0 74%;aspect-ratio:3/4;border-radius:16px;overflow:hidden;scroll-snap-align:center;box-shadow:0 8px 22px rgba(60,80,110,.15);position:relative;display:grid;place-items:end center}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo .cap{position:relative;margin:0 0 14px;padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.8);font-size:15px;font-style:italic}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:4px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:background .3s,width .3s}
+.dots i.on{background:var(--accent);width:16px;border-radius:3px}
+.swatches{display:flex;justify-content:center;align-items:center;gap:10px;margin:22px 0 16px}
+.swatches span{font-style:italic;color:var(--muted);margin-right:4px}
+.swatches i{width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06),0 3px 8px rgba(0,0,0,.08)}
+.dress p{margin-top:10px}
+.dress b{font-weight:600;color:var(--accent-deep)}
+
+.closing .photo-round{width:200px;height:200px;margin:0 auto 22px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 6px #fff,0 0 0 7px var(--line),0 14px 30px rgba(60,80,110,.18);background:radial-gradient(circle at 40% 35%,#fbf9f4,#e3ebf4);display:grid;place-items:center}
+.closing .photo-round img{width:100%;height:100%;object-fit:cover}
+.closing .photo-round span{font-style:italic;font-size:54px;color:var(--gold)}
+.closing .big{font-style:italic;font-size:30px;color:var(--accent-deep)}
+.closing .names-s{font-size:32px;font-weight:500;margin-top:6px}
+footer{padding:30px 20px 60px;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.08em}
+
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;width:50px;height:50px;border-radius:50%;background:var(--accent);color:#fff;display:none;place-items:center;box-shadow:0 8px 20px rgba(75,108,153,.4)}
+.fab.show{display:grid}
+.fab svg{width:20px;height:20px}
+
+dialog{border:0;padding:0;margin:auto auto 0;width:100%;max-width:520px;max-height:92svh;border-radius:22px 22px 0 0;background:var(--paper-2);color:var(--ink);box-shadow:0 -10px 40px rgba(40,60,90,.2)}
+dialog[open]{animation:up .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(100%)}}
+dialog::backdrop{background:rgba(40,55,80,.35);backdrop-filter:blur(3px)}
+@media (min-width:600px){dialog{margin:auto;border-radius:22px}}
+.sheet{padding:26px 22px calc(26px + env(safe-area-inset-bottom));text-align:center}
+.sheet .x{position:absolute;right:12px;top:10px;width:38px;height:38px;font-size:26px;color:var(--muted)}
+.sheet h3{font-style:italic;font-weight:500;font-size:32px;color:var(--accent-deep)}
+form{text-align:left;margin-top:16px;font-family:var(--sans);font-size:15px}
+form label.f{display:block;margin:16px 0 6px;font-size:13px;letter-spacing:.04em;color:var(--muted)}
+form input[type=text],form input[type=number],form textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+form input:focus,form textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(111,159,216,.18)}
+form textarea{min-height:76px;resize:vertical}
+.opts{display:grid;gap:8px}
+.opts label{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;transition:border-color .2s,background .2s}
+.opts input{accent-color:var(--accent);width:18px;height:18px}
+.opts label:has(input:checked){border-color:var(--accent);background:#f1f6fc}
+form .btn{width:100%;justify-content:center;margin-top:22px;font-size:15px}
+form .btn[disabled]{opacity:.6}
+.status{margin-top:12px;text-align:center;min-height:20px;font-size:14px}
+.status.err{color:#b04a4a}
+.thanks{display:none;padding:20px 0 6px}
+.thanks.show{display:block}
+.thanks p{font-size:20px}
+
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none}
+  .petal,.scroll-cue,.seal{animation:none}
+}
+</style>
+</head>
+<body class="locked">
+
+<div id="intro" aria-label="Πρόσκληση">
+  <div class="gate-layer">
+    <div class="gate-sky"></div>
+    <div class="leaf l"><svg viewBox="0 0 100 320" preserveAspectRatio="none" aria-hidden="true"><use href="#leafArt"/></svg></div>
+    <div class="leaf r"><svg viewBox="0 0 100 320" preserveAspectRatio="none" aria-hidden="true"><use href="#leafArt"/></svg></div>
+    <div class="pillar l"></div>
+    <div class="pillar r"></div>
+    <div class="vine l"></div>
+    <div class="vine r"></div>
+    <div class="foliage"></div>
+    <svg class="ribbon" viewBox="0 0 200 150" aria-hidden="true">
+      <g fill="#fbfaf6" stroke="#d6cfc0" stroke-width="2" stroke-linejoin="round">
+        <path d="M92 62 C60 20 12 22 18 54 C22 80 64 78 92 70Z"/>
+        <path d="M108 62 C140 20 188 22 182 54 C178 80 136 78 108 70Z"/>
+        <path d="M94 72 C80 100 64 124 48 142 L66 146 C82 124 94 100 100 78Z"/>
+        <path d="M106 72 C120 100 136 124 152 142 L134 146 C118 124 106 100 100 78Z"/>
+        <rect x="88" y="56" width="24" height="22" rx="7"/>
+      </g>
+      <path d="M40 46c14 0 30 6 44 16M160 46c-14 0-30 6-44 16" fill="none" stroke="#e6dfd2" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="env">
+    <div class="env-body">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 100 L50 62 L100 100" fill="none" stroke="#e2dccf" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+    </div>
+    <div class="flap-wrap"><div class="env-flap"></div></div>
+    <button class="seal" id="seal" aria-label="Ανοίξτε την πρόσκληση"><span data-k="initials">Ε&amp;Ν</span></button>
+    <p class="env-hint">Πατήστε τη σφραγίδα</p>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="leafArt" fill="none" stroke="#4d6585" stroke-width="2.2" vector-effect="non-scaling-stroke">
+      <rect x="3" y="40" width="94" height="277" vector-effect="non-scaling-stroke"/>
+      <path d="M3 40 Q55 34 97 8" vector-effect="non-scaling-stroke"/>
+      <path d="M15 36.4V317M27 32.8V317M39 29.2V317M51 25.6V317M63 22V317M75 18.4V317M87 14.8V317" vector-effect="non-scaling-stroke"/>
+      <path d="M3 118H97M3 126H97M3 238H97M3 300H97" vector-effect="non-scaling-stroke"/>
+      <path d="M97 150 A24 24 0 0 0 97 198 M97 160 A14 14 0 0 0 97 188" vector-effect="non-scaling-stroke"/>
+      <path d="M21 150c-9 0-9 14 0 14c6 0 6-8 0-8M45 150c-9 0-9 14 0 14c6 0 6-8 0-8M69 150c-9 0-9 14 0 14c6 0 6-8 0-8M21 206c-9 0-9 14 0 14c6 0 6-8 0-8M45 206c-9 0-9 14 0 14c6 0 6-8 0-8M69 206c-9 0-9 14 0 14c6 0 6-8 0-8" vector-effect="non-scaling-stroke"/>
+      <path d="M9 262c6-10 18-10 24 0s18 10 24 0s18-10 24 0" vector-effect="non-scaling-stroke"/>
+      <circle cx="15" cy="34" r="2.4" fill="#4d6585"/><circle cx="39" cy="27" r="2.4" fill="#4d6585"/><circle cx="63" cy="20" r="2.4" fill="#4d6585"/><circle cx="87" cy="13" r="2.4" fill="#4d6585"/>
+    </g>
+    <pattern id="bal" width="26" height="90" patternUnits="userSpaceOnUse">
+      <path d="M7 0h12v6c-4 3-5 8-2 13c5 9 6 22 2 32c-3 8-3 16 2 22v17H7V73c5-6 5-14 2-22c-4-10-3-23 2-32c3-5 2-10-2-13Z" fill="#f4f1ea" stroke="#d9d2c4" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9dcf0"/><stop offset=".55" stop-color="#e9f0f7"/><stop offset="1" stop-color="#f3f5f7"/></linearGradient>
+    <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9c3de"/><stop offset="1" stop-color="#dde8f2"/></linearGradient>
+    <radialGradient id="hazeG"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  </defs>
+</svg>
+
+<main>
+  <section class="hero" id="hero">
+    <div class="arch">
+      <svg viewBox="0 0 400 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="400" height="760" fill="url(#skyG)"/>
+        <circle cx="260" cy="300" r="170" fill="url(#hazeG)"/>
+        <path d="M-10 470 L40 420 L90 438 L150 380 L205 428 L250 400 L300 440 L410 410 L410 480 L-10 480Z" fill="#b7c9dc" opacity=".8"/>
+        <path d="M160 480 L240 370 L290 330 L330 360 L370 340 L410 380 L410 485 Z" fill="#8fa8c2"/>
+        <path d="M200 470 C240 452 300 448 410 452 L410 486 L200 486Z" fill="#6f8aa5" opacity=".75"/>
+        <path d="M-10 478 C60 470 120 474 180 480 L180 490 L-10 490Z" fill="#9fb4c9"/>
+        <rect y="484" width="400" height="120" fill="url(#waterG)"/>
+        <path d="M60 520h70M210 540h120M110 566h90M260 506h60" stroke="#fff" stroke-opacity=".7" stroke-width="2" stroke-linecap="round"/>
+        <rect y="592" width="400" height="14" fill="#f6f3ec"/>
+        <rect y="606" width="400" height="90" fill="url(#bal)"/>
+        <rect y="694" width="400" height="16" fill="#efebe3"/>
+        <rect y="710" width="400" height="60" fill="#e9e4da"/>
+      </svg>
+      <div class="hero-text">
+        <div class="names"><span data-k="name1">Ελένη</span><span class="amp">&amp;</span><span data-k="name2">Νίκος</span></div>
+        <div class="headline" data-k="headline">παντρευόμαστε!</div>
+      </div>
+    </div>
+    <div class="scroll-cue">scroll</div>
+  </section>
+
+  <section class="block" id="date">
+    <div class="reveal">
+      <h2 data-k="date_title">Η Ημερομηνία</h2>
+      <p class="sub">✦ <span data-k="scratch_hint">Ξύστε για να αποκαλύψετε την ημερομηνία</span> ✦</p>
+    </div>
+    <div class="scratch-row reveal">
+      <div class="scard"><div class="face"><span class="val" data-k="date_day"></span><canvas></canvas></div><div class="lbl">ΗΜΕΡΑ</div></div>
+      <div class="scard mid"><div class="face"><span class="val" data-k="date_month"></span><canvas></canvas></div><div class="lbl">ΜΗΝΑΣ</div></div>
+      <div class="scard"><div class="face"><span class="val" data-k="date_year"></span><canvas></canvas></div><div class="lbl">ΕΤΟΣ</div></div>
+    </div>
+    <div class="invited" id="invited" data-k="invited_text">Είστε προσκεκλημένοι!</div>
+  </section>
+
+  <section class="block" id="letter">
+    <div class="letter-stage" id="letterStage">
+      <div class="env-back"></div>
+      <div class="letter">
+        <div class="for" id="forGuest"></div>
+        <div class="greet" id="greet" data-k="letter_greeting"></div>
+        <p data-k="letter_text"></p>
+        <div class="sign" data-k="letter_sign"></div>
+      </div>
+      <div class="env-front"></div>
+    </div>
+  </section>
+
+  <section class="block" id="schedule">
+    <div class="reveal"><h2 data-k="schedule_title">Το Πρόγραμμα</h2></div>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <section class="block" id="venue">
+    <div class="reveal">
+      <h2 data-k="venue_title">Ο Χώρος</h2>
+      <div class="venue-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+        <div class="venue-name" data-k="venue_name"></div>
+        <div class="sub" data-k="venue_address"></div>
+        <a class="btn" id="mapBtn" target="_blank" rel="noopener">Οδηγίες στον χάρτη ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block dress" id="dress">
+    <div class="reveal">
+      <h2 data-k="dress_title">Dress Code</h2>
+      <p data-k="dress_intro"></p>
+      <div class="swipe">σύρετε →</div>
+    </div>
+    <div class="track" id="track"></div>
+    <div class="dots" id="dots"></div>
+    <div class="reveal">
+      <div class="swatches" id="swatches"><span>Χρώματα:</span></div>
+      <p><b>Κυρίες:</b> <span data-k="dress_ladies"></span></p>
+      <p><b>Κύριοι:</b> <span data-k="dress_gentlemen"></span></p>
+    </div>
+  </section>
+
+  <section class="block" id="rsvpSec">
+    <div class="reveal">
+      <h2 data-k="rsvp_title">Επιβεβαιώστε την παρουσία σας</h2>
+      <p data-k="rsvp_intro"></p>
+      <button class="btn" id="openRsvp">RSVP</button>
+    </div>
+  </section>
+
+  <section class="block closing">
+    <div class="reveal">
+      <div class="photo-round" id="couple"><span data-k="initials">Ε&amp;Ν</span></div>
+      <div class="big" data-k="closing_text">Ανυπομονούμε να σας δούμε!</div>
+      <div class="names-s"><span data-k="name1"></span> &amp; <span data-k="name2"></span></div>
+    </div>
+  </section>
+  <footer>♡</footer>
+</main>
+
+<button class="fab" id="fab" aria-label="Παύση μουσικής">
+  <svg id="icPause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+  <svg id="icPlay" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+</button>
+<audio id="music" loop preload="none"></audio>
+
+<dialog id="rsvp">
+  <div class="sheet">
+    <button class="x" id="closeRsvp" aria-label="Κλείσιμο">×</button>
+    <h3>RSVP</h3>
+    <p class="sub">Παρακαλούμε απαντήστε έως <span data-k="rsvp_deadline"></span></p>
+    <form id="rsvpForm" novalidate>
+      <label class="f" for="fName">Ονοματεπώνυμο</label>
+      <input type="text" id="fName" name="name" autocomplete="name" required maxlength="200">
+      <label class="f">Θα έρθετε;</label>
+      <div class="opts">
+        <label><input type="radio" name="attending" value="Ναι" required> Ναι, θα έρθω!</label>
+        <label><input type="radio" name="attending" value="Όχι"> Δυστυχώς δεν μπορώ</label>
+        <label><input type="radio" name="attending" value="Ίσως"> Θα σας ενημερώσω</label>
+      </div>
+      <label class="f" for="fGuests">Πόσα άτομα (μαζί με εσάς);</label>
+      <input type="number" id="fGuests" name="guests" min="1" max="10" value="1" inputmode="numeric">
+      <label class="f" for="fFood">Διατροφικές προτιμήσεις ή αλλεργίες;</label>
+      <textarea id="fFood" name="food" maxlength="1000" placeholder="π.χ. χορτοφαγικό μενού"></textarea>
+      <button class="btn" type="submit" id="sendBtn">Αποστολή</button>
+      <div class="status" id="status" role="status"></div>
+    </form>
+    <div class="thanks" id="thanks">
+      <h3>Ευχαριστούμε!</h3>
+      <p id="thanksMsg"></p>
+      <button class="btn ghost" id="doneBtn">Κλείσιμο</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const CONFIG = { SCRIPT_URL: "" };
+
+const DEMO = {
+  content: {
+    initials: "Ε&Ν",
+    name1: "Ελένη",
+    name2: "Νίκος",
+    headline: "παντρευόμαστε!",
+    date_title: "Η Ημερομηνία",
+    scratch_hint: "Ξύστε για να αποκαλύψετε την ημερομηνία",
+    date_day: "12",
+    date_month: "Ιουνίου",
+    date_year: "2027",
+    invited_text: "Είστε προσκεκλημένοι!",
+    letter_greeting: "Αγαπημένοι μας,",
+    letter_text: "Με μεγάλη χαρά σας προσκαλούμε να μοιραστείτε μαζί μας την πιο όμορφη μέρα της ζωής μας. Η παρουσία σας θα την κάνει ακόμα πιο ξεχωριστή.",
+    letter_sign: "Με αγάπη, Ελένη & Νίκος",
+    schedule_title: "Το Πρόγραμμα",
+    venue_title: "Ο Χώρος",
+    venue_name: "Κτήμα Ελαιώνας",
+    venue_address: "Αρχαία Ολυμπία, Ηλεία",
+    venue_map_url: "https://maps.google.com/?q=Archaia+Olympia",
+    dress_title: "Dress Code",
+    dress_intro: "Θα χαρούμε πολύ αν τα ρούχα σας είναι στα χρώματα του γάμου μας.",
+    dress_ladies: "Κομψά καλοκαιρινά φορέματα σε παστέλ αποχρώσεις. Ένα καπέλο και γυαλιά ηλίου θα σας φανούν χρήσιμα.",
+    dress_gentlemen: "Κουστούμι ή πουκάμισο σε ανοιχτές αποχρώσεις: γκρι, μπλε, μπεζ.",
+    dress_colours: "#E9DCC0,#F2C9C4,#D9C2E3,#A9C7EA",
+    rsvp_title: "Επιβεβαιώστε την παρουσία σας",
+    rsvp_intro: "Για να ετοιμάσουμε μια χαρούμενη γιορτή, παρακαλούμε επιβεβαιώστε την παρουσία σας.",
+    rsvp_deadline: "30 Απριλίου",
+    closing_text: "Ανυπομονούμε να σας δούμε!",
+    couple_photo_url: "",
+    music_url: ""
+  },
+  schedule: [
+    { time: "18:00", title: "Τελετή", note: "Στο εκκλησάκι του κτήματος" },
+    { time: "19:00", title: "Κοκτέιλ", note: "Στον κήπο με τις ελιές" },
+    { time: "20:30", title: "Δείπνο", note: "" },
+    { time: "22:00", title: "Πάρτι", note: "Χορός μέχρι το πρωί" }
+  ],
+  photos: []
+};
+
+const $ = s => document.querySelector(s);
+const guest = (new URLSearchParams(location.search).get("guest") || "").trim().slice(0, 80);
+let data = DEMO;
+
+const imgUrl = u => {
+  if (!u) return "";
+  const m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]+)/);
+  return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : u;
+};
+
+async function load() {
+  if (!CONFIG.SCRIPT_URL) return;
+  try {
+    const r = await fetch(CONFIG.SCRIPT_URL);
+    const j = await r.json();
+    data = {
+      content: { ...DEMO.content, ...(j.content || {}) },
+      schedule: j.schedule && j.schedule.length ? j.schedule : DEMO.schedule,
+      photos: j.photos || []
+    };
+  } catch (e) {
+    console.warn("Sheet load failed, using demo data", e);
+  }
+}
+
+function render() {
+  const c = data.content;
+  document.querySelectorAll("[data-k]").forEach(el => {
+    const v = c[el.dataset.k];
+    if (v !== undefined && v !== "") el.textContent = v;
+  });
+  document.title = `${c.name1} & ${c.name2}`;
+  $("#mapBtn").href = c.venue_map_url || `https://maps.google.com/?q=${encodeURIComponent(c.venue_name + " " + c.venue_address)}`;
+
+  if (guest) {
+    $("#forGuest").textContent = `Για ${guest}`;
+    $("#fName").value = guest;
+  }
+
+  const tl = $("#timeline");
+  tl.innerHTML = "";
+  data.schedule.forEach(s => {
+    const row = document.createElement("div");
+    row.className = "tl reveal";
+    const box = document.createElement("div");
+    box.className = "c";
+    [["t", s.time], ["n", s.title], ["m", s.note]].forEach(([cls, txt]) => {
+      if (!txt) return;
+      const d = document.createElement("div");
+      d.className = cls;
+      d.textContent = txt;
+      box.appendChild(d);
+    });
+    const dot = document.createElement("div");
+    dot.className = "dot";
+    row.append(box, dot);
+    tl.appendChild(row);
+  });
+
+  const colours = (c.dress_colours || "").split(",").map(s => s.trim()).filter(s => /^#?[0-9a-f]{3,8}$/i.test(s)).map(s => s.startsWith("#") ? s : "#" + s);
+  const sw = $("#swatches");
+  sw.querySelectorAll("i").forEach(i => i.remove());
+  colours.forEach(col => { const i = document.createElement("i"); i.style.background = col; sw.appendChild(i); });
+
+  const track = $("#track");
+  track.innerHTML = "";
+  const photos = data.photos.filter(p => p.url);
+  const items = photos.length ? photos : colours.map((col, i) => ({ grad: col, caption: `Έμπνευση ${i + 1}` }));
+  items.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "photo";
+    if (p.url) {
+      const img = document.createElement("img");
+      img.src = imgUrl(p.url);
+      img.alt = p.caption || "";
+      img.loading = "lazy";
+      card.appendChild(img);
+    } else {
+      card.style.background = `linear-gradient(160deg, #fff 0%, ${p.grad} 70%)`;
+    }
+    if (p.caption) {
+      const cap = document.createElement("div");
+      cap.className = "cap";
+      cap.textContent = p.caption;
+      card.appendChild(cap);
+    }
+    track.appendChild(card);
+  });
+  const dots = $("#dots");
+  dots.innerHTML = items.map((_, i) => `<i class="${i ? "" : "on"}"></i>`).join("");
+  track.onscroll = () => {
+    const w = track.firstElementChild ? track.firstElementChild.offsetWidth + 12 : 1;
+    const idx = Math.round(track.scrollLeft / w);
+    [...dots.children].forEach((d, i) => d.classList.toggle("on", i === idx));
+  };
+
+  if (c.couple_photo_url) {
+    const img = document.createElement("img");
+    img.src = imgUrl(c.couple_photo_url);
+    img.alt = `${c.name1} & ${c.name2}`;
+    $("#couple").replaceChildren(img);
+  }
+
+  if (c.music_url) $("#music").src = c.music_url;
+}
+
+function petals() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const hero = $("#hero");
+  for (let i = 0; i < 10; i++) {
+    const p = document.createElement("span");
+    p.className = "petal";
+    p.style.left = Math.random() * 100 + "%";
+    p.style.setProperty("--dx", (Math.random() * 120 - 60) + "px");
+    p.style.animationDuration = 9 + Math.random() * 8 + "s";
+    p.style.animationDelay = -Math.random() * 14 + "s";
+    p.style.transform = `scale(${0.6 + Math.random() * 0.7})`;
+    hero.appendChild(p);
+  }
+}
+
+function openIntro() {
+  const intro = $("#intro");
+  if (intro.classList.contains("opened")) return;
+  intro.classList.add("opened");
+  const audio = $("#music");
+  if (audio.src) {
+    audio.play().then(() => setFab(true)).catch(() => setFab(false));
+  }
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  setTimeout(() => {
+    intro.classList.add("gone");
+    document.body.classList.remove("locked");
+    if (audio.src) $("#fab").classList.add("show");
+    setTimeout(() => intro.remove(), 1000);
+  }, reduce ? 300 : 4200);
+}
+
+function setFab(playing) {
+  $("#icPause").style.display = playing ? "" : "none";
+  $("#icPlay").style.display = playing ? "none" : "";
+  $("#fab").setAttribute("aria-label", playing ? "Παύση μουσικής" : "Αναπαραγωγή μουσικής");
+}
+
+function scratch() {
+  const cards = [...document.querySelectorAll(".scard")];
+  let doneCount = 0;
+  cards.forEach(card => {
+    const cv = card.querySelector("canvas");
+    const ctx = cv.getContext("2d", { willReadFrequently: true });
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const size = () => {
+      const r = cv.getBoundingClientRect();
+      cv.width = Math.max(1, r.width * dpr);
+      cv.height = Math.max(1, r.height * dpr);
+      const g = ctx.createLinearGradient(0, 0, cv.width, cv.height);
+      g.addColorStop(0, "#a7c4e6");
+      g.addColorStop(.5, "#cfe0f2");
+      g.addColorStop(1, "#9fbde2");
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, cv.width, cv.height);
+      ctx.fillStyle = "rgba(255,255,255,.75)";
+      for (let i = 0; i < 26; i++) {
+        ctx.beginPath();
+        ctx.arc(Math.random() * cv.width, Math.random() * cv.height, (Math.random() * 1.6 + .4) * dpr, 0, 7);
+        ctx.fill();
+      }
+      ctx.font = `${22 * dpr}px serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("✦", cv.width / 2, cv.height / 2);
+    };
+    size();
+    let down = false, last = null, moves = 0, finished = false;
+    const pos = e => {
+      const r = cv.getBoundingClientRect();
+      return [(e.clientX - r.left) * dpr, (e.clientY - r.top) * dpr];
+    };
+    const stroke = p => {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineCap = ctx.lineJoin = "round";
+      ctx.lineWidth = 34 * dpr;
+      ctx.beginPath();
+      ctx.moveTo(...(last || p));
+      ctx.lineTo(...p);
+      ctx.stroke();
+      last = p;
+    };
+    const check = () => {
+      const d = ctx.getImageData(0, 0, cv.width, cv.height).data;
+      let clear = 0, total = 0;
+      for (let i = 3; i < d.length; i += 64) { total++; if (d[i] < 128) clear++; }
+      if (clear / total > 0.5 && !finished) {
+        finished = true;
+        card.classList.add("done");
+        if (navigator.vibrate) navigator.vibrate(15);
+        if (++doneCount === cards.length) setTimeout(() => $("#invited").classList.add("in"), 300);
+      }
+    };
+    cv.addEventListener("pointerdown", e => { down = true; last = null; cv.setPointerCapture(e.pointerId); stroke(pos(e)); });
+    cv.addEventListener("pointermove", e => { if (!down) return; stroke(pos(e)); if (++moves % 6 === 0) check(); });
+    const up = () => { if (down) { down = false; check(); } };
+    cv.addEventListener("pointerup", up);
+    cv.addEventListener("pointercancel", up);
+  });
+}
+
+function observe() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { threshold: .25 });
+  document.querySelectorAll(".reveal, #letterStage").forEach(el => io.observe(el));
+}
+
+function rsvp() {
+  const dlg = $("#rsvp"), form = $("#rsvpForm"), status = $("#status");
+  $("#openRsvp").onclick = () => { dlg.showModal(); };
+  $("#closeRsvp").onclick = $("#doneBtn").onclick = () => dlg.close();
+  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+  form.onsubmit = async e => {
+    e.preventDefault();
+    status.className = "status";
+    const fd = new FormData(form);
+    const payload = {
+      name: (fd.get("name") || "").toString().trim(),
+      attending: fd.get("attending") || "",
+      guests: fd.get("guests") || "1",
+      food: (fd.get("food") || "").toString().trim(),
+      guest
+    };
+    if (!payload.name) { status.textContent = "Συμπληρώστε το όνομά σας."; status.classList.add("err"); $("#fName").focus(); return; }
+    if (!payload.attending) { status.textContent = "Επιλέξτε αν θα έρθετε."; status.classList.add("err"); return; }
+    $("#sendBtn").disabled = true;
+    status.textContent = "Αποστολή…";
+    try {
+      if (CONFIG.SCRIPT_URL) {
+        const r = await fetch(CONFIG.SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+        const j = await r.json();
+        if (!j.ok) throw new Error(j.error || "error");
+      } else {
+        await new Promise(r => setTimeout(r, 700));
+      }
+      form.style.display = "none";
+      $("#thanksMsg").textContent = payload.attending === "Ναι" ? "Ανυπομονούμε να γιορτάσουμε μαζί σας!" : payload.attending === "Όχι" ? "Θα μας λείψετε! Σας ευχαριστούμε που μας ενημερώσατε." : "Περιμένουμε τα νέα σας!";
+      $("#thanks").classList.add("show");
+    } catch (err) {
+      status.textContent = "Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο.";
+      status.classList.add("err");
+    } finally {
+      $("#sendBtn").disabled = false;
+    }
+  };
+}
+
+$("#seal").addEventListener("click", openIntro);
+$("#fab").addEventListener("click", () => {
+  const a = $("#music");
+  if (a.paused) a.play().then(() => setFab(true)).catch(() => {});
+  else { a.pause(); setFab(false); }
+});
+
+(async () => {
+  render();
+  await load();
+  render();
+  petals();
+  scratch();
+  observe();
+  rsvp();
+})();
+</script>
+</body>
+</html>
