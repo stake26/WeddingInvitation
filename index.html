@@ -398,9 +398,9 @@ form .btn[disabled]{opacity:.6}
 </dialog>
 
 <script>
-const CONFIG = { SCRIPT_URL: "" };
+const RSVP_URL = "https://script.google.com/macros/s/AKfycbxuzgeO4N9mdI_fU0CPcnORTclR3vxXobX28SzR_kcP/exec";
 
-const DEMO = {
+const DATA = {
   content: {
     initials: "Ε&Ν",
     name1: "Ελένη",
@@ -443,28 +443,13 @@ const DEMO = {
 
 const $ = s => document.querySelector(s);
 const guest = (new URLSearchParams(location.search).get("guest") || "").trim().slice(0, 80);
-let data = DEMO;
+const data = DATA;
 
 const imgUrl = u => {
   if (!u) return "";
   const m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]+)/);
   return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : u;
 };
-
-async function load() {
-  if (!CONFIG.SCRIPT_URL) return;
-  try {
-    const r = await fetch(CONFIG.SCRIPT_URL);
-    const j = await r.json();
-    data = {
-      content: { ...DEMO.content, ...(j.content || {}) },
-      schedule: j.schedule && j.schedule.length ? j.schedule : DEMO.schedule,
-      photos: j.photos || []
-    };
-  } catch (e) {
-    console.warn("Sheet load failed, using demo data", e);
-  }
-}
 
 function render() {
   const c = data.content;
@@ -677,8 +662,8 @@ function rsvp() {
     $("#sendBtn").disabled = true;
     status.textContent = "Αποστολή…";
     try {
-      if (CONFIG.SCRIPT_URL) {
-        const r = await fetch(CONFIG.SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+      if (RSVP_URL) {
+        const r = await fetch(RSVP_URL, { method: "POST", body: JSON.stringify(payload) });
         const j = await r.json();
         if (!j.ok) throw new Error(j.error || "error");
       } else {
@@ -703,9 +688,7 @@ $("#fab").addEventListener("click", () => {
   else { a.pause(); setFab(false); }
 });
 
-(async () => {
-  render();
-  await load();
+(() => {
   render();
   petals();
   scratch();
