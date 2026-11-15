@@ -143,6 +143,9 @@ h2.script{font-size:38px}
 .big-date{font-family:var(--display);font-weight:300;font-size:34px;color:#4f4760;line-height:1.2}
 .weekday{font-style:italic;color:var(--taupe)}
 
+.koum{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;margin:22px auto 0;width:100%}
+.koum .k{font-family:var(--display);font-weight:300;font-size:30px;line-height:1.25;color:var(--purple)}
+.koum .amp{font-family:var(--script);font-style:italic;font-size:34px;line-height:1.2;color:var(--sage)}
 .place{margin-top:30px}
 .place .caps{margin-bottom:6px;color:var(--sage)}
 .place h3{font-family:var(--display);font-weight:300;font-size:28px;line-height:1.2;color:#4f4760}
@@ -289,6 +292,7 @@ footer .caps{margin-top:6px}
 <div id="menu">
   <a href="#hero">Αρχή</a>
   <a href="#countdown">Αντίστροφη μέτρηση</a>
+  <a href="#koumbaroi">Κουμπάροι</a>
   <a href="#location">Τοποθεσία</a>
   <a href="#day">Το πρόγραμμα</a>
   <a href="#dress">Dress code</a>
@@ -334,6 +338,14 @@ footer .caps{margin-top:6px}
       <div class="big-date" id="bigDate"></div>
       <div class="weekday" id="weekday"></div>
       <div class="cal"><a id="gcal" target="_blank" rel="noopener">Google Calendar</a><button id="ics">Apple / Outlook</button></div>
+    </div>
+  </section>
+
+  <section class="blk" id="koumbaroi">
+    <div class="reveal">
+      <div class="caps">Οι κουμπάροι μας</div>
+      <h2 class="script">Στο πλευρό μας</h2>
+      <div class="koum" id="koumList"></div>
     </div>
   </section>
 
@@ -434,16 +446,17 @@ footer .caps{margin-top:6px}
 const RSVP_URL = "https://script.google.com/macros/s/AKfycbygIoInYSLj1LSdT8wZeuYTjctOBjD7Wu8yo1gOrFaMVUfoql0vE4HiVSZXuNPOw8RDrQ/exec";
 
 const DATA = {
-  name1: "Ελένη",
-  name2: "Νίκος",
-  monogram: "Ε&Ν",
+  name1: "Βασίλης",
+  name2: "Λυδία",
+  monogram: "Β&Λ",
+  koumbaroi: ["Αριάδνη Κυριακίδου", "Μαρία Καραποστόλου"],
   invite_line: "Με όλη μας την αγάπη\nσας προσκαλούμε",
   place_line: "Θεσσαλονίκη",
   datetime: "2027-09-25T19:00:00+03:00",
   date_dots: "25 · 09 · 2027",
   date_long: "25 Σεπτεμβρίου 2027",
   weekday: "Σάββατο",
-  calendar: { title: "Ο γάμος της Ελένης & του Νίκου", start: "20270925T190000", end: "20270926T030000", tz: "Europe/Athens", location: "Ιερά Μονή Βλατάδων, Θεσσαλονίκη" },
+  calendar: { title: "Ο γάμος του Βασίλη & της Λυδίας", start: "20270925T190000", end: "20270926T030000", tz: "Europe/Athens", location: "Ιερά Μονή Βλατάδων, Θεσσαλονίκη" },
   places: [
     { label: "Τελετή", name: "Ιερά Μονή Βλατάδων", time: "19:00", address: "Άνω Πόλη, Θεσσαλονίκη", map: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Ιερά Μονή Βλατάδων Θεσσαλονίκη") },
     { label: "Δεξίωση", name: "Ιππικός Όμιλος Θεσσαλονίκης", time: "21:00", address: "Θεσσαλονίκη", map: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Ιππικός Όμιλος Θεσσαλονίκης") }
@@ -458,7 +471,7 @@ const DATA = {
   dress_text: "Θα χαρούμε πολύ να σας δούμε ντυμένους στις αποχρώσεις του γάμου μας.",
   dress_palette: ["#8b80a2", "#b3acc2", "#a28b80", "#acc2b3", "#80a28b"],
   gift_text: "Η παρουσία σας είναι το μεγαλύτερο δώρο. Για όσους θέλουν να μας ευχηθούν με κάτι παραπάνω, έχουμε επιλέξει να συγκεντρώσουμε συνεισφορές για τον μήνα του μέλιτος.",
-  iban_holder: "Δικαιούχος: Ελένη Παππά & Νίκος Λύρας · Τράπεζα Παράδειγμα",
+  iban_holder: "Δικαιούχος: Βασίλης & Λυδία · Τράπεζα Παράδειγμα",
   iban: "GR00 0000 0000 0000 0000 0000 000",
   rsvp_deadline: "31 Αυγούστου 2027"
 };
@@ -530,6 +543,11 @@ function render() {
   txt("#dressTitle", D.dress_title);
   txt("#dressText", D.dress_text);
   D.dress_palette.forEach(c => { const i = document.createElement("i"); i.style.background = c; $("#palette").appendChild(i); });
+  const kl = $("#koumList");
+  D.koumbaroi.forEach((n, i) => {
+    if (i) { const a = document.createElement("span"); a.className = "amp"; a.textContent = "&"; kl.appendChild(a); }
+    const k = document.createElement("div"); k.className = "k"; k.textContent = n; kl.appendChild(k);
+  });
   txt("#giftText", D.gift_text);
   txt("#ibanHolder", D.iban_holder);
   txt("#ibanCode", D.iban);
